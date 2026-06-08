@@ -94,8 +94,8 @@ function escapeHtml(text) {
 
 function formatDate(value) {
   if (!value) return '';
-  const date = new Date(`${value.replace(' ', 'T')}Z`);
-  if (Number.isNaN(date.getTime())) return value;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
   return date.toLocaleString('es-UY');
 }
 

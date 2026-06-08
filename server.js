@@ -47,23 +47,28 @@ function enrichParticipante(participante) {
   };
 }
 
-app.post('/api/participantes', (req, res) => {
-  const nombre = String(req.body.nombre || '').trim();
-  const direccion = String(req.body.direccion || '').trim();
-  const ciudad = String(req.body.ciudad || '').trim();
-  const celular = String(req.body.celular || '').trim();
+app.post('/api/participantes', async (req, res) => {
+  try {
+    const nombre = String(req.body.nombre || '').trim();
+    const direccion = String(req.body.direccion || '').trim();
+    const ciudad = String(req.body.ciudad || '').trim();
+    const celular = String(req.body.celular || '').trim();
 
-  if (!nombre || !direccion || !ciudad || !celular) {
-    return res.status(400).json({ error: 'Completá todos los campos.' });
+    if (!nombre || !direccion || !ciudad || !celular) {
+      return res.status(400).json({ error: 'Completá todos los campos.' });
+    }
+
+    const participante = await db.createParticipante({ nombre, direccion, ciudad, celular });
+    const enriched = enrichParticipante(participante);
+
+    res.status(201).json({
+      participante: enriched,
+      whatsapp_url: enriched.whatsapp_business_url,
+    });
+  } catch (error) {
+    console.error('Error al registrar participante:', error);
+    res.status(500).json({ error: 'No se pudo registrar la participación.' });
   }
-
-  const participante = db.createParticipante({ nombre, direccion, ciudad, celular });
-  const enriched = enrichParticipante(participante);
-
-  res.status(201).json({
-    participante: enriched,
-    whatsapp_url: enriched.whatsapp_business_url,
-  });
 });
 
 app.post('/api/admin/login', (req, res) => {
@@ -88,34 +93,58 @@ app.get('/api/admin/session', (req, res) => {
   res.json({ authenticated: Boolean(req.session?.admin) });
 });
 
-app.get('/api/participantes', requireAdmin, (_req, res) => {
-  const participantes = db.getAllParticipantes().map(enrichParticipante);
-  res.json({
-    total: participantes.length,
-    participantes,
-  });
+app.get('/api/participantes', requireAdmin, async (_req, res) => {
+  try {
+    const participantes = (await db.getAllParticipantes()).map(enrichParticipante);
+    res.json({
+      total: participantes.length,
+      participantes,
+    });
+  } catch (error) {
+    console.error('Error al listar participantes:', error);
+    res.status(500).json({ error: 'No se pudieron cargar los participantes.' });
+  }
 });
 
-app.post('/api/sorteo', requireAdmin, (_req, res) => {
-  const total = db.getParticipantesCount();
+app.post('/api/sorteo', requireAdmin, async (_req, res) => {
+  try {
+    const total = await db.getParticipantesCount();
 
-  if (total === 0) {
-    return res.status(400).json({ error: 'No hay participantes registrados.' });
+    if (total === 0) {
+      return res.status(400).json({ error: 'No hay participantes registrados.' });
+    }
+
+    const ganador = await db.pickRandomWinner();
+    const enriched = enrichParticipante(ganador);
+    const mensajeGanador = buildGanadorMessage(ganador);
+
+    res.json({
+      total,
+      ganador: {
+        ...enriched,
+        whatsapp_ganador_url: buildWhatsAppUrl(ganador.celular, mensajeGanador),
+      },
+    });
+  } catch (error) {
+    console.error('Error al realizar sorteo:', error);
+    res.status(500).json({ error: 'No se pudo realizar el sorteo.' });
+  }
+});
+
+async function start() {
+  if (!process.env.DATABASE_URL) {
+    console.error('Falta la variable de entorno DATABASE_URL.');
+    process.exit(1);
   }
 
-  const ganador = db.pickRandomWinner();
-  const enriched = enrichParticipante(ganador);
-  const mensajeGanador = buildGanadorMessage(ganador);
+  await db.init();
 
-  res.json({
-    total,
-    ganador: {
-      ...enriched,
-      whatsapp_ganador_url: buildWhatsAppUrl(ganador.celular, mensajeGanador),
-    },
+  app.listen(PORT, () => {
+    console.log(`Servidor en http://localhost:${PORT}`);
   });
-});
+}
 
-app.listen(PORT, () => {
-  console.log(`Servidor en http://localhost:${PORT}`);
+start().catch((error) => {
+  console.error('No se pudo iniciar el servidor:', error);
+  process.exit(1);
 });
