@@ -20,6 +20,9 @@ const ganadorWhatsapp = document.getElementById('ganador-whatsapp');
 const btnRepetirSorteo = document.getElementById('btn-repetir-sorteo');
 const sorteoError = document.getElementById('sorteo-error');
 
+const apiFetch = (url, options = {}) =>
+  fetch(url, { credentials: 'same-origin', ...options });
+
 function showLoginError(message) {
   loginError.hidden = !message;
   loginError.textContent = message || '';
@@ -37,7 +40,7 @@ function setAuthenticated(isAuthenticated) {
 }
 
 async function checkSession() {
-  const response = await fetch('/api/admin/session');
+  const response = await apiFetch('/api/admin/session');
   const data = await response.json();
   setAuthenticated(data.authenticated);
 
@@ -47,7 +50,7 @@ async function checkSession() {
 }
 
 async function loadParticipantes() {
-  const response = await fetch('/api/participantes');
+  const response = await apiFetch('/api/participantes');
   const data = await response.json();
 
   if (!response.ok) {
@@ -148,7 +151,7 @@ loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   showLoginError('');
 
-  const response = await fetch('/api/admin/login', {
+  const response = await apiFetch('/api/admin/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -169,7 +172,7 @@ loginForm.addEventListener('submit', async (e) => {
 });
 
 btnLogout.addEventListener('click', async () => {
-  await fetch('/api/admin/logout', { method: 'POST' });
+  await apiFetch('/api/admin/logout', { method: 'POST' });
   setAuthenticated(false);
   loginForm.reset();
 });
@@ -189,7 +192,7 @@ btnSortear.addEventListener('click', async () => {
 
   runCountdown(async () => {
     try {
-      const response = await fetch('/api/sorteo', { method: 'POST' });
+      const response = await apiFetch('/api/sorteo', { method: 'POST' });
       const data = await response.json();
 
       if (!response.ok) {
