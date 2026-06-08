@@ -13,6 +13,7 @@
   --white: #ffffff;
   --border: #e0e0e0;
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --whatsapp: #25d366;
 }
 
 html {
@@ -25,6 +26,23 @@ body {
   color: var(--black);
   min-height: 100dvh;
   line-height: 1.5;
+}
+
+.admin-link {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 10;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray);
+  text-decoration: none;
+}
+
+.admin-link:hover {
+  color: var(--black);
 }
 
 .page {
@@ -161,6 +179,12 @@ body {
   border-color: #c0392b;
 }
 
+.form-error {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: #c0392b;
+}
+
 .form-actions {
   display: flex;
   gap: 0.75rem;
@@ -179,9 +203,18 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, transform 0.15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn:active {
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn:active:not(:disabled) {
   transform: scale(0.98);
 }
 
@@ -190,7 +223,7 @@ body {
   color: var(--white);
 }
 
-.btn--primary:hover {
+.btn--primary:hover:not(:disabled) {
   background: #333;
   border-color: #333;
 }
@@ -200,8 +233,23 @@ body {
   color: var(--black);
 }
 
-.btn--secondary:hover {
+.btn--secondary:hover:not(:disabled) {
   background: var(--gray-light);
+}
+
+.btn--whatsapp {
+  background: var(--whatsapp);
+  border-color: var(--whatsapp);
+  color: var(--white);
+}
+
+.btn--whatsapp:hover {
+  background: #1ebe57;
+  border-color: #1ebe57;
+}
+
+.btn--full {
+  width: 100%;
 }
 
 @media (max-width: 380px) {
