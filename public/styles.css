@@ -30,19 +30,30 @@ body {
 
 .admin-link {
   position: fixed;
-  top: 0.75rem;
-  right: 0.75rem;
-  z-index: 10;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  padding: 0.55rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--gray);
+  color: var(--white);
   text-decoration: none;
+  background: var(--black);
+  border: 2px solid var(--black);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: background 0.2s, transform 0.15s;
 }
 
 .admin-link:hover {
-  color: var(--black);
+  background: #333;
+  border-color: #333;
+}
+
+.admin-link:active {
+  transform: scale(0.97);
 }
 
 .page {
