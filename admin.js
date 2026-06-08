@@ -20,9 +20,6 @@ const ganadorWhatsapp = document.getElementById('ganador-whatsapp');
 const btnRepetirSorteo = document.getElementById('btn-repetir-sorteo');
 const sorteoError = document.getElementById('sorteo-error');
 
-const apiFetch = (url, options = {}) =>
-  fetch(url, { credentials: 'same-origin', ...options });
-
 function showLoginError(message) {
   loginError.hidden = !message;
   loginError.textContent = message || '';

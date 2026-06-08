@@ -17,6 +17,25 @@ app.set('trust proxy', 1);
 
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.ADMIN_PASS || 'soldada';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://sorteo-beautymaxuy.pages.dev';
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (origin === FRONTEND_URL) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
 
 function requireAdmin(req, res, next) {
   if (req.session?.admin) return next();
@@ -146,7 +165,7 @@ async function start() {
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         maxAge: 24 * 60 * 60 * 1000,
       },
     })

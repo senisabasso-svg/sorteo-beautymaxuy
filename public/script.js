@@ -61,7 +61,7 @@ form.addEventListener('submit', async (e) => {
   setError('');
 
   try {
-    const response = await fetch('/api/participantes', {
+    const response = await apiFetch('/api/participantes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

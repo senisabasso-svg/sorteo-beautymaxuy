@@ -11,7 +11,8 @@ const files = [
   'admin.html',
   'admin.js',
   'admin.css',
-  '_redirects',
+  'config.js',
+  'api.js',
 ];
 
 for (const file of files) {
