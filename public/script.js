@@ -1,10 +1,11 @@
+const WHATSAPP_NUMBER = '59897428888';
+
 const landing = document.getElementById('landing');
 const formulario = document.getElementById('formulario');
 const exito = document.getElementById('exito');
 const btnParticipar = document.getElementById('btn-participar');
 const btnVolver = document.getElementById('btn-volver');
 const btnInicio = document.getElementById('btn-inicio');
-const btnEnviar = document.getElementById('btn-enviar');
 const form = document.getElementById('participacion-form');
 const formError = document.getElementById('form-error');
 
@@ -41,7 +42,7 @@ btnInicio.addEventListener('click', () => {
   showScreen(landing);
 });
 
-form.addEventListener('submit', async (e) => {
+form.addEventListener('submit', (e) => {
   e.preventDefault();
 
   if (!form.checkValidity()) {
@@ -49,36 +50,23 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
-  const payload = {
-    nombre: document.getElementById('nombre').value.trim(),
-    direccion: document.getElementById('direccion').value.trim(),
-    ciudad: document.getElementById('ciudad').value.trim(),
-    celular: document.getElementById('celular').value.trim(),
-  };
-
-  btnEnviar.disabled = true;
-  btnEnviar.textContent = 'Enviando...';
   setError('');
 
-  try {
-    const response = await apiFetch('/api/participantes', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+  const nombre = document.getElementById('nombre').value.trim();
+  const direccion = document.getElementById('direccion').value.trim();
+  const ciudad = document.getElementById('ciudad').value.trim();
+  const celular = document.getElementById('celular').value.trim();
 
-    const data = await response.json();
+  const mensaje = [
+    '*Participante desde web*',
+    '',
+    `*Nombre:* ${nombre}`,
+    `*Dirección:* ${direccion}`,
+    `*Ciudad:* ${ciudad}`,
+    `*Celular:* ${celular}`,
+  ].join('\n');
 
-    if (!response.ok) {
-      throw new Error(data.error || 'No se pudo registrar la participación.');
-    }
-
-    window.open(data.whatsapp_url, '_blank');
-    showScreen(exito);
-  } catch (error) {
-    setError(error.message);
-  } finally {
-    btnEnviar.disabled = false;
-    btnEnviar.textContent = 'Enviar';
-  }
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, '_blank');
+  showScreen(exito);
 });
