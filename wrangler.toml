@@ -1,7 +1,6 @@
 name = "sorteo-beautymaxuy"
 compatibility_date = "2025-06-01"
+workers_dev = true
 
 [assets]
 directory = "./dist"
-html_handling = "auto"
-not_found_handling = "404-page"
