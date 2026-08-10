@@ -65,7 +65,7 @@ form.addEventListener('submit', (e) => {
   const celular = document.getElementById('celular').value.trim();
 
   const cierre = checkRegalo.checked
-    ? 'OBTENER REGALO FEBROS + CUPO Y PARTICIPACION EN SORTEOS'
+    ? 'cupo limitado sistema + sorteo beautymax + regalo de 20 post para redes incluido plan de atraccion de clientes y crecimiento en redes'
     : 'PARTICIPACION SORTEOS';
 
   const mensaje = [
