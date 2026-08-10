@@ -1,6 +1,5 @@
 const WHATSAPP_NUMBER = '59897428888';
 
-const TEXTO_SORTEOS = 'sorteo plancha + sorteo febros';
 const TEXTO_CUPO =
   'cupo limitado sistema + sorteo beautymax + regalo de 20 post para redes incluido plan de atraccion de clientes y crecimiento en redes';
 
