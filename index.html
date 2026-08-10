@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sorteo BeautyMax - Plancha Kiepe</title>
-  <meta name="description" content="Participá del sorteo BeautyMax y Febros. Se sortea una plancha Kiepe Professional.">
+  <title>Sorteo BeautyMax + Febros</title>
+  <meta name="description" content="Sorteo conjunto BeautyMax y Febros: plancha Kiepe y Gestion Cosmetica.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -18,15 +18,35 @@
 
         <div class="hero">
           <p class="hero__date">Sorteo exclusivo para profesionales en el sector</p>
-          <h1 class="hero__title">Plancha Kiepe</h1>
-          <p class="hero__subtitle">Professional Home Precision</p>
+          <h1 class="hero__title">Sorteo conjunto</h1>
+          <p class="hero__subtitle">BeautyMax + Febros</p>
         </div>
 
-        <img
-          src="assets/plancha-kiepe.png"
-          alt="Plancha Kiepe Professional Hair Styler"
-          class="premio"
-        >
+        <div class="premios">
+          <figure class="premio-card">
+            <img
+              src="assets/plancha-kiepe.png"
+              alt="Plancha Kiepe Professional Hair Styler"
+              class="premio-card__img"
+            >
+            <figcaption class="premio-card__caption">
+              <strong>BeautyMax</strong>
+              <span>Sortea la plancha Kiepe</span>
+            </figcaption>
+          </figure>
+
+          <figure class="premio-card">
+            <img
+              src="assets/gestion-cosmetica.png"
+              alt="Gestion Cosmetica"
+              class="premio-card__img premio-card__img--dark"
+            >
+            <figcaption class="premio-card__caption">
+              <strong>Febros</strong>
+              <span>Sortea Gestion Cosmetica</span>
+            </figcaption>
+          </figure>
+        </div>
 
         <button type="button" id="btn-participar" class="btn btn--primary">
           PARTICIPAR
@@ -39,7 +59,7 @@
         <img src="assets/logo-beautymax-febros.png" alt="BeautyMax Distribuidora y Febros Software Development" class="logo logo--small">
 
         <h2 class="form-title">Completá tus datos</h2>
-        <p class="form-subtitle">Para participar del sorteo de la plancha Kiepe</p>
+        <p class="form-subtitle">Para participar del sorteo conjunto BeautyMax + Febros</p>
 
         <form id="participacion-form" class="form" novalidate>
           <div class="field">
@@ -88,7 +108,7 @@
       <div class="card">
         <img src="assets/logo-beautymax-febros.png" alt="BeautyMax Distribuidora y Febros Software Development" class="logo logo--small">
         <h2 class="form-title">¡Listo!</h2>
-        <p class="form-subtitle">Ya estás participando. Te redirigimos a WhatsApp para confirmar.</p>
+        <p class="form-subtitle">Ya estás participando del sorteo conjunto. Te redirigimos a WhatsApp para confirmar.</p>
         <button type="button" id="btn-inicio" class="btn btn--primary">Volver al inicio</button>
       </div>
     </section>
