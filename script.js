@@ -8,6 +8,8 @@ const btnVolver = document.getElementById('btn-volver');
 const btnInicio = document.getElementById('btn-inicio');
 const form = document.getElementById('participacion-form');
 const formError = document.getElementById('form-error');
+const checkSorteos = document.getElementById('check-sorteos');
+const checkRegalo = document.getElementById('check-regalo');
 
 const screens = [landing, formulario, exito];
 
@@ -50,6 +52,11 @@ form.addEventListener('submit', (e) => {
     return;
   }
 
+  if (!checkSorteos.checked) {
+    setError('Marcá la participación en los sorteos para continuar.');
+    return;
+  }
+
   setError('');
 
   const nombre = document.getElementById('nombre').value.trim();
@@ -57,14 +64,17 @@ form.addEventListener('submit', (e) => {
   const ciudad = document.getElementById('ciudad').value.trim();
   const celular = document.getElementById('celular').value.trim();
 
+  const cierre = checkRegalo.checked
+    ? 'OBTENER REGALO FEBROS + CUPO Y PARTICIPACION EN SORTEOS'
+    : 'PARTICIPACION SORTEOS';
+
   const mensaje = [
-    '*Participante desde web*',
-    '*Sorteo plancha Kiepe*',
-    '',
     `*Nombre:* ${nombre}`,
     `*Dirección:* ${direccion}`,
     `*Ciudad:* ${ciudad}`,
     `*Celular:* ${celular}`,
+    '',
+    `*${cierre}*`,
   ].join('\n');
 
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
