@@ -24,10 +24,11 @@ for (const file of files) {
   fs.copyFileSync(path.join(publicDir, file), path.join(distDir, file));
 }
 
-const logoSrc = path.join(publicDir, 'assets', 'logo-beautymax.png');
-const logoDest = path.join(distDir, 'assets', 'logo-beautymax.png');
-if (fs.existsSync(logoSrc)) {
-  fs.copyFileSync(logoSrc, logoDest);
+const assetsDir = path.join(publicDir, 'assets');
+if (fs.existsSync(assetsDir)) {
+  for (const file of fs.readdirSync(assetsDir)) {
+    fs.copyFileSync(path.join(assetsDir, file), path.join(distDir, 'assets', file));
+  }
 }
 
 console.log('Front estático generado en dist/ (Cloudflare).');

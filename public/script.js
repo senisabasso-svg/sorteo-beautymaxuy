@@ -59,6 +59,7 @@ form.addEventListener('submit', (e) => {
 
   const mensaje = [
     '*Participante desde web*',
+    '*Sorteo plancha Kiepe*',
     '',
     `*Nombre:* ${nombre}`,
     `*Dirección:* ${direccion}`,
