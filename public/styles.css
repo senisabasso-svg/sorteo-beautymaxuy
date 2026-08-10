@@ -142,54 +142,20 @@ body {
   align-items: stretch;
 }
 
-.premio-card {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
 .premio-card__img {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: contain;
-  background: #f7f7f7;
+  background: var(--white);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
-  padding: 0.35rem;
-}
-
-.premio-card__img--dark {
-  background: #000;
-  object-fit: cover;
-}
-
-.premio-card__caption {
-  margin-top: 0.7rem;
-  display: grid;
-  gap: 0.15rem;
-  text-align: center;
-}
-
-.premio-card__caption strong {
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.premio-card__caption span {
-  font-size: 0.78rem;
-  color: var(--gray);
-  line-height: 1.3;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
 }
 
 @media (max-width: 380px) {
   .premios {
     gap: 0.6rem;
-  }
-
-  .premio-card__caption span {
-    font-size: 0.72rem;
   }
 }
 
