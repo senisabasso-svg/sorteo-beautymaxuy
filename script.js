@@ -1,8 +1,5 @@
 const WHATSAPP_NUMBER = '59897428888';
 
-const TEXTO_CUPO =
-  'cupo limitado sistema + sorteo beautymax + regalo de 20 post para redes incluido plan de atraccion de clientes y crecimiento en redes';
-
 const landing = document.getElementById('landing');
 const formulario = document.getElementById('formulario');
 const exito = document.getElementById('exito');
@@ -11,8 +8,6 @@ const btnVolver = document.getElementById('btn-volver');
 const btnInicio = document.getElementById('btn-inicio');
 const form = document.getElementById('participacion-form');
 const formError = document.getElementById('form-error');
-const checkSorteos = document.getElementById('check-sorteos');
-const checkRegalo = document.getElementById('check-regalo');
 
 const screens = [landing, formulario, exito];
 
@@ -55,11 +50,6 @@ form.addEventListener('submit', (e) => {
     return;
   }
 
-  if (!checkSorteos.checked) {
-    setError('Marcá la participación en los sorteos para continuar.');
-    return;
-  }
-
   setError('');
 
   const nombre = document.getElementById('nombre').value.trim();
@@ -67,17 +57,13 @@ form.addEventListener('submit', (e) => {
   const ciudad = document.getElementById('ciudad').value.trim();
   const celular = document.getElementById('celular').value.trim();
 
-  // Solo check 1 → PARTICIPACION SORTEOS
-  // Check 1 + 2 → mismo texto del check 2
-  const cierre = checkRegalo.checked ? TEXTO_CUPO : 'PARTICIPACION SORTEOS';
-
   const mensaje = [
     `*Nombre:* ${nombre}`,
     `*Dirección:* ${direccion}`,
     `*Ciudad:* ${ciudad}`,
     `*Celular:* ${celular}`,
     '',
-    cierre,
+    'PARTICIPACION SORTEO BEAUTYMAX',
   ].join('\n');
 
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
