@@ -1,3 +1,7 @@
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'soldada';
+const SESSION_KEY = 'sorteo_admin_auth';
+
 const loginScreen = document.getElementById('login-screen');
 const dashboard = document.getElementById('dashboard');
 const loginForm = document.getElementById('login-form');
@@ -10,13 +14,7 @@ const tabButtons = document.querySelectorAll('.tabs__btn');
 const tabPanels = document.querySelectorAll('.tab-panel');
 const btnSortear = document.getElementById('btn-sortear');
 const countdown = document.getElementById('countdown');
-const countdownNumber = document.getElementById('countdown-number');
 const ganador = document.getElementById('ganador');
-const ganadorNombre = document.getElementById('ganador-nombre');
-const ganadorDireccion = document.getElementById('ganador-direccion');
-const ganadorCiudad = document.getElementById('ganador-ciudad');
-const ganadorCelular = document.getElementById('ganador-celular');
-const ganadorWhatsapp = document.getElementById('ganador-whatsapp');
 const btnRepetirSorteo = document.getElementById('btn-repetir-sorteo');
 const sorteoError = document.getElementById('sorteo-error');
 
@@ -30,73 +28,28 @@ function showSorteoError(message) {
   sorteoError.textContent = message || '';
 }
 
-function setAuthenticated(isAuthenticated) {
-  loginScreen.hidden = isAuthenticated;
-  dashboard.hidden = !isAuthenticated;
-  btnLogout.hidden = !isAuthenticated;
+function isAuthenticated() {
+  return sessionStorage.getItem(SESSION_KEY) === '1';
 }
 
-async function checkSession() {
-  const response = await apiFetch('/api/admin/session');
-  const data = await response.json();
-  setAuthenticated(data.authenticated);
-
-  if (data.authenticated) {
-    await loadParticipantes();
+function setAuthenticated(value) {
+  if (value) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+  } else {
+    sessionStorage.removeItem(SESSION_KEY);
   }
+
+  loginScreen.hidden = value;
+  dashboard.hidden = !value;
+  btnLogout.hidden = !value;
 }
 
-async function loadParticipantes() {
-  const response = await apiFetch('/api/participantes');
-  const data = await response.json();
-
-  if (!response.ok) {
-    if (response.status === 401) setAuthenticated(false);
-    return;
-  }
-
-  totalParticipantes.textContent = data.total;
+function loadParticipantes() {
+  totalParticipantes.textContent = '0';
   clientesList.innerHTML = '';
-
-  if (data.participantes.length === 0) {
-    clientesEmpty.hidden = false;
-    return;
-  }
-
-  clientesEmpty.hidden = true;
-
-  data.participantes.forEach((participante) => {
-    const item = document.createElement('article');
-    item.className = 'cliente-card';
-    item.innerHTML = `
-      <div class="cliente-card__info">
-        <h3>${escapeHtml(participante.nombre)}</h3>
-        <p><strong>Dirección:</strong> ${escapeHtml(participante.direccion)}</p>
-        <p><strong>Ciudad:</strong> ${escapeHtml(participante.ciudad)}</p>
-        <p><strong>Celular:</strong> ${escapeHtml(participante.celular)}</p>
-        <p class="cliente-card__fecha">${formatDate(participante.created_at)}</p>
-      </div>
-      <a class="btn btn--whatsapp" href="${participante.whatsapp_url}" target="_blank" rel="noopener noreferrer">
-        WhatsApp
-      </a>
-    `;
-    clientesList.appendChild(item);
-  });
-}
-
-function escapeHtml(text) {
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-function formatDate(value) {
-  if (!value) return '';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return String(value);
-  return date.toLocaleString('es-UY');
+  clientesEmpty.hidden = false;
+  clientesEmpty.textContent =
+    'Los participantes llegan por WhatsApp. Este panel ya no consulta el backend.';
 }
 
 function activateTab(tabName) {
@@ -116,60 +69,23 @@ function resetSorteoView() {
   showSorteoError('');
 }
 
-function showWinner(data) {
-  ganadorNombre.textContent = data.ganador.nombre;
-  ganadorDireccion.textContent = data.ganador.direccion;
-  ganadorCiudad.textContent = data.ganador.ciudad;
-  ganadorCelular.textContent = data.ganador.celular;
-  ganadorWhatsapp.href = data.ganador.whatsapp_ganador_url;
-  ganador.hidden = false;
-}
-
-function runCountdown(onComplete) {
-  let current = 3;
-  countdown.hidden = false;
-  countdownNumber.textContent = String(current);
-
-  const interval = setInterval(() => {
-    current -= 1;
-
-    if (current > 0) {
-      countdownNumber.textContent = String(current);
-      return;
-    }
-
-    clearInterval(interval);
-    countdown.hidden = true;
-    onComplete();
-  }, 1000);
-}
-
-loginForm.addEventListener('submit', async (e) => {
+loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
   showLoginError('');
 
-  const response = await apiFetch('/api/admin/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      usuario: document.getElementById('usuario').value.trim(),
-      clave: document.getElementById('clave').value,
-    }),
-  });
+  const usuario = document.getElementById('usuario').value.trim();
+  const clave = document.getElementById('clave').value;
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    showLoginError(data.error || 'No se pudo iniciar sesión.');
+  if (usuario !== ADMIN_USER || clave !== ADMIN_PASS) {
+    showLoginError('Usuario o clave incorrectos.');
     return;
   }
 
   setAuthenticated(true);
-  await loadParticipantes();
+  loadParticipantes();
 });
 
-btnLogout.addEventListener('click', async () => {
-  await apiFetch('/api/admin/logout', { method: 'POST' });
+btnLogout.addEventListener('click', () => {
   setAuthenticated(false);
   loginForm.reset();
 });
@@ -183,29 +99,20 @@ tabButtons.forEach((button) => {
   });
 });
 
-btnSortear.addEventListener('click', async () => {
+btnSortear.addEventListener('click', () => {
   resetSorteoView();
-  btnSortear.hidden = true;
-
-  runCountdown(async () => {
-    try {
-      const response = await apiFetch('/api/sorteo', { method: 'POST' });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'No se pudo realizar el sorteo.');
-      }
-
-      showWinner(data);
-    } catch (error) {
-      showSorteoError(error.message);
-      btnSortear.hidden = false;
-    }
-  });
+  showSorteoError(
+    'El sorteo automático está desactivado. Los participantes llegan por WhatsApp.'
+  );
 });
 
 btnRepetirSorteo.addEventListener('click', () => {
   resetSorteoView();
 });
 
-checkSession();
+if (isAuthenticated()) {
+  setAuthenticated(true);
+  loadParticipantes();
+} else {
+  setAuthenticated(false);
+}
