@@ -117,20 +117,28 @@ function setupRoutes() {
     try {
       const total = await db.getParticipantesCount();
 
-      if (total === 0) {
-        return res.status(400).json({ error: 'No hay participantes registrados.' });
+      if (total < 2) {
+        return res.status(400).json({
+          error: 'Se necesitan al menos 2 participantes para sortear BeautyMax y Febros.',
+        });
       }
 
-      const ganador = await db.pickRandomWinner();
-      const enriched = enrichParticipante(ganador);
-      const mensajeGanador = buildGanadorMessage(ganador);
+      const [ganadorBeautymax, ganadorFebros] = await db.pickTwoDistinctWinners();
+
+      const enrichGanador = (ganador, premio) => {
+        const enriched = enrichParticipante(ganador);
+        const mensajeGanador = buildGanadorMessage(ganador, premio);
+        return {
+          ...enriched,
+          premio,
+          whatsapp_ganador_url: buildWhatsAppUrl(ganador.celular, mensajeGanador),
+        };
+      };
 
       res.json({
         total,
-        ganador: {
-          ...enriched,
-          whatsapp_ganador_url: buildWhatsAppUrl(ganador.celular, mensajeGanador),
-        },
+        ganador_beautymax: enrichGanador(ganadorBeautymax, 'beautymax'),
+        ganador_febros: enrichGanador(ganadorFebros, 'febros'),
       });
     } catch (error) {
       console.error('Error al realizar sorteo:', error);

@@ -10,13 +10,10 @@ const tabButtons = document.querySelectorAll('.tabs__btn');
 const tabPanels = document.querySelectorAll('.tab-panel');
 const btnSortear = document.getElementById('btn-sortear');
 const countdown = document.getElementById('countdown');
+const countdownLabel = document.getElementById('countdown-label');
 const countdownNumber = document.getElementById('countdown-number');
-const ganador = document.getElementById('ganador');
-const ganadorNombre = document.getElementById('ganador-nombre');
-const ganadorDireccion = document.getElementById('ganador-direccion');
-const ganadorCiudad = document.getElementById('ganador-ciudad');
-const ganadorCelular = document.getElementById('ganador-celular');
-const ganadorWhatsapp = document.getElementById('ganador-whatsapp');
+const ganadorBeautymax = document.getElementById('ganador-beautymax');
+const ganadorFebros = document.getElementById('ganador-febros');
 const btnRepetirSorteo = document.getElementById('btn-repetir-sorteo');
 const sorteoError = document.getElementById('sorteo-error');
 
@@ -111,23 +108,25 @@ function activateTab(tabName) {
 
 function resetSorteoView() {
   countdown.hidden = true;
-  ganador.hidden = true;
+  ganadorBeautymax.hidden = true;
+  ganadorFebros.hidden = true;
+  btnRepetirSorteo.hidden = true;
   btnSortear.hidden = false;
   showSorteoError('');
 }
 
-function showWinner(data) {
-  ganadorNombre.textContent = data.ganador.nombre;
-  ganadorDireccion.textContent = data.ganador.direccion;
-  ganadorCiudad.textContent = data.ganador.ciudad;
-  ganadorCelular.textContent = data.ganador.celular;
-  ganadorWhatsapp.href = data.ganador.whatsapp_ganador_url;
-  ganador.hidden = false;
+function fillWinner(prefix, data) {
+  document.getElementById(`${prefix}-nombre`).textContent = data.nombre;
+  document.getElementById(`${prefix}-direccion`).textContent = data.direccion;
+  document.getElementById(`${prefix}-ciudad`).textContent = data.ciudad;
+  document.getElementById(`${prefix}-celular`).textContent = data.celular;
+  document.getElementById(`${prefix}-whatsapp`).href = data.whatsapp_ganador_url;
 }
 
-function runCountdown(onComplete) {
+function runCountdown(label, onComplete) {
   let current = 3;
   countdown.hidden = false;
+  countdownLabel.textContent = label;
   countdownNumber.textContent = String(current);
 
   const interval = setInterval(() => {
@@ -142,6 +141,10 @@ function runCountdown(onComplete) {
     countdown.hidden = true;
     onComplete();
   }, 1000);
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 loginForm.addEventListener('submit', async (e) => {
@@ -187,21 +190,30 @@ btnSortear.addEventListener('click', async () => {
   resetSorteoView();
   btnSortear.hidden = true;
 
-  runCountdown(async () => {
-    try {
-      const response = await apiFetch('/api/sorteo', { method: 'POST' });
-      const data = await response.json();
+  try {
+    const response = await apiFetch('/api/sorteo', { method: 'POST' });
+    const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || 'No se pudo realizar el sorteo.');
-      }
-
-      showWinner(data);
-    } catch (error) {
-      showSorteoError(error.message);
-      btnSortear.hidden = false;
+    if (!response.ok) {
+      throw new Error(data.error || 'No se pudo realizar el sorteo.');
     }
-  });
+
+    runCountdown('Sorteo BeautyMax — Kit Organic Pro', async () => {
+      fillWinner('ganador-beautymax', data.ganador_beautymax);
+      ganadorBeautymax.hidden = false;
+
+      await wait(1200);
+
+      runCountdown('Sorteo Febros — Web para tu salón', () => {
+        fillWinner('ganador-febros', data.ganador_febros);
+        ganadorFebros.hidden = false;
+        btnRepetirSorteo.hidden = false;
+      });
+    });
+  } catch (error) {
+    showSorteoError(error.message);
+    btnSortear.hidden = false;
+  }
 });
 
 btnRepetirSorteo.addEventListener('click', () => {

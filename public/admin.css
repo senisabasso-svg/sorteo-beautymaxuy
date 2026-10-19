@@ -154,6 +154,15 @@
   margin: 2rem auto;
 }
 
+.countdown__label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 1rem;
+}
+
 .countdown__number {
   display: inline-flex;
   align-items: center;
