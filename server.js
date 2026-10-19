@@ -18,11 +18,20 @@ app.set('trust proxy', 1);
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.ADMIN_PASS || 'soldada';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://sorteo-beautymaxuy.pages.dev';
+const ALLOWED_ORIGINS = new Set(
+  [
+    FRONTEND_URL,
+    process.env.RAILWAY_PUBLIC_DOMAIN
+      ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+      : null,
+    'https://sorteo-beautymaxuy-production.up.railway.app',
+  ].filter(Boolean)
+);
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
-  if (origin === FRONTEND_URL) {
+  if (origin && ALLOWED_ORIGINS.has(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
   }

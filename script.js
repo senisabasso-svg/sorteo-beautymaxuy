@@ -1,11 +1,10 @@
-const WHATSAPP_NUMBER = '59897428888';
-
 const landing = document.getElementById('landing');
 const formulario = document.getElementById('formulario');
 const exito = document.getElementById('exito');
 const btnParticipar = document.getElementById('btn-participar');
 const btnVolver = document.getElementById('btn-volver');
 const btnInicio = document.getElementById('btn-inicio');
+const btnEnviar = document.getElementById('btn-enviar');
 const form = document.getElementById('participacion-form');
 const formError = document.getElementById('form-error');
 
@@ -42,7 +41,7 @@ btnInicio.addEventListener('click', () => {
   showScreen(landing);
 });
 
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   if (!form.checkValidity()) {
@@ -57,16 +56,29 @@ form.addEventListener('submit', (e) => {
   const ciudad = document.getElementById('ciudad').value.trim();
   const celular = document.getElementById('celular').value.trim();
 
-  const mensaje = [
-    `*Nombre:* ${nombre}`,
-    `*Dirección:* ${direccion}`,
-    `*Ciudad:* ${ciudad}`,
-    `*Celular:* ${celular}`,
-    '',
-    'PARTICIPACION SORTEO BEAUTYMAX',
-  ].join('\n');
+  btnEnviar.disabled = true;
 
-  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
-  window.open(url, '_blank');
-  showScreen(exito);
+  try {
+    const response = await apiFetch('/api/participantes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, direccion, ciudad, celular }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'No se pudo registrar la participación.');
+    }
+
+    if (data.whatsapp_url) {
+      window.open(data.whatsapp_url, '_blank');
+    }
+
+    showScreen(exito);
+  } catch (error) {
+    setError(error.message || 'No se pudo registrar. Intentá de nuevo.');
+  } finally {
+    btnEnviar.disabled = false;
+  }
 });
