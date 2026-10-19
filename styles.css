@@ -95,26 +95,11 @@ body {
   text-align: center;
 }
 
-.logos {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin: 0 auto 2rem;
-  flex-wrap: wrap;
-}
-
 .logo {
-  width: min(180px, 42%);
+  width: min(360px, 92%);
   height: auto;
-  max-height: 110px;
-  object-fit: contain;
-  margin: 0;
+  margin: 0 auto 2rem;
   display: block;
-}
-
-.logo--febros {
-  width: min(130px, 36%);
 }
 
 .logo--small {

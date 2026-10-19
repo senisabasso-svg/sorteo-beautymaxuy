@@ -42,7 +42,7 @@
         <div class="admin-top">
           <div>
             <h1 class="admin-title">Panel de sorteo</h1>
-            <p class="admin-subtitle">BeautyMax + Febros</p>
+            <p class="admin-subtitle">BeautyMax Distribuidora</p>
           </div>
           <p class="admin-count"><span id="total-participantes">0</span> participantes</p>
         </div>
@@ -59,43 +59,26 @@
 
         <div id="tab-sorteo" class="tab-panel">
           <div class="sorteo-panel">
-            <p class="sorteo-panel__text">
-              Se elegirán dos ganadores distintos: primero BeautyMax (kit Organic Pro) y luego Febros (web para tu salón).
-            </p>
+            <p class="sorteo-panel__text">Se elegirá un ganador al azar del kit completo de Organic Pro.</p>
             <button type="button" id="btn-sortear" class="btn btn--primary btn--full">Realizar sorteo</button>
 
             <div id="countdown" class="countdown" hidden>
-              <p id="countdown-label" class="countdown__label"></p>
               <span id="countdown-number" class="countdown__number">3</span>
             </div>
 
-            <div id="ganador-beautymax" class="ganador" hidden>
-              <p class="ganador__label">Ganador BeautyMax — Kit Organic Pro</p>
-              <h2 id="ganador-beautymax-nombre" class="ganador__nombre"></h2>
+            <div id="ganador" class="ganador" hidden>
+              <p class="ganador__label">¡Ganador! — Kit Organic Pro</p>
+              <h2 id="ganador-nombre" class="ganador__nombre"></h2>
               <ul class="ganador__datos">
-                <li><strong>Dirección:</strong> <span id="ganador-beautymax-direccion"></span></li>
-                <li><strong>Ciudad:</strong> <span id="ganador-beautymax-ciudad"></span></li>
-                <li><strong>Celular:</strong> <span id="ganador-beautymax-celular"></span></li>
+                <li><strong>Dirección:</strong> <span id="ganador-direccion"></span></li>
+                <li><strong>Ciudad:</strong> <span id="ganador-ciudad"></span></li>
+                <li><strong>Celular:</strong> <span id="ganador-celular"></span></li>
               </ul>
-              <a id="ganador-beautymax-whatsapp" class="btn btn--whatsapp btn--full" href="#" target="_blank" rel="noopener noreferrer">
+              <a id="ganador-whatsapp" class="btn btn--whatsapp btn--full" href="#" target="_blank" rel="noopener noreferrer">
                 Contactar por WhatsApp
               </a>
+              <button type="button" id="btn-repetir-sorteo" class="btn btn--secondary btn--full">Sortear de nuevo</button>
             </div>
-
-            <div id="ganador-febros" class="ganador" hidden>
-              <p class="ganador__label">Ganador Febros — Web para tu salón</p>
-              <h2 id="ganador-febros-nombre" class="ganador__nombre"></h2>
-              <ul class="ganador__datos">
-                <li><strong>Dirección:</strong> <span id="ganador-febros-direccion"></span></li>
-                <li><strong>Ciudad:</strong> <span id="ganador-febros-ciudad"></span></li>
-                <li><strong>Celular:</strong> <span id="ganador-febros-celular"></span></li>
-              </ul>
-              <a id="ganador-febros-whatsapp" class="btn btn--whatsapp btn--full" href="#" target="_blank" rel="noopener noreferrer">
-                Contactar por WhatsApp
-              </a>
-            </div>
-
-            <button type="button" id="btn-repetir-sorteo" class="btn btn--secondary btn--full" hidden>Sortear de nuevo</button>
 
             <p id="sorteo-error" class="form-error" hidden></p>
           </div>
