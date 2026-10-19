@@ -107,12 +107,14 @@ body {
 .logo {
   width: min(180px, 42%);
   height: auto;
+  max-height: 110px;
+  object-fit: contain;
   margin: 0;
   display: block;
 }
 
 .logo--febros {
-  border-radius: 10px;
+  width: min(130px, 36%);
 }
 
 .logo--small {
