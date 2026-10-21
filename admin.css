@@ -61,12 +61,25 @@
   margin-bottom: 1.5rem;
 }
 
+.admin-top__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65rem;
+}
+
 .admin-count {
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+.btn--excel {
+  white-space: nowrap;
+  padding: 0.55rem 1rem;
+  font-size: 0.8rem;
 }
 
 .tabs {

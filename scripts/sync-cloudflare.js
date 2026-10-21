@@ -12,6 +12,7 @@ const files = [
   'admin.html',
   'admin.js',
   'admin.css',
+  'participantes-data.js',
   'config.js',
   'api.js',
 ];

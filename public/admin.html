@@ -14,37 +14,19 @@
   <div class="admin-page">
     <header class="admin-header">
       <a href="/" class="admin-header__back">← Volver al sorteo</a>
-      <button type="button" id="btn-logout" class="admin-header__logout" hidden>Cerrar sesión</button>
     </header>
 
-    <section id="login-screen" class="admin-card">
-      <img src="assets/logo-beautymax.png" alt="BeautyMax Distribuidora" class="logo logo--small">
-      <h1 class="admin-title">Acceso administrador</h1>
-
-      <form id="login-form" class="form">
-        <div class="field">
-          <label for="usuario">Usuario</label>
-          <input type="text" id="usuario" name="usuario" required autocomplete="username">
-        </div>
-
-        <div class="field">
-          <label for="clave">Clave</label>
-          <input type="password" id="clave" name="clave" required autocomplete="current-password">
-        </div>
-
-        <p id="login-error" class="form-error" hidden></p>
-        <button type="submit" class="btn btn--primary btn--full">Ingresar</button>
-      </form>
-    </section>
-
-    <section id="dashboard" class="admin-dashboard" hidden>
+    <section id="dashboard" class="admin-dashboard">
       <div class="admin-card admin-card--wide">
         <div class="admin-top">
           <div>
             <h1 class="admin-title">Panel de sorteo</h1>
             <p class="admin-subtitle">BeautyMax Distribuidora</p>
           </div>
-          <p class="admin-count"><span id="total-participantes">0</span> participantes</p>
+          <div class="admin-top__actions">
+            <p class="admin-count"><span id="total-participantes">0</span> participantes</p>
+            <button type="button" id="btn-excel" class="btn btn--secondary btn--excel">Extraer Excel</button>
+          </div>
         </div>
 
         <nav class="tabs">
@@ -54,12 +36,12 @@
 
         <div id="tab-clientes" class="tab-panel tab-panel--active">
           <div id="clientes-list" class="clientes-list"></div>
-          <p id="clientes-empty" class="empty-state" hidden>No hay participantes registrados todavía.</p>
+          <p id="clientes-empty" class="empty-state" hidden>No hay participantes cargados.</p>
         </div>
 
         <div id="tab-sorteo" class="tab-panel">
           <div class="sorteo-panel">
-            <p class="sorteo-panel__text">Se elegirá un ganador al azar del kit completo de Organic Pro.</p>
+            <p class="sorteo-panel__text">Se elegirá un ganador al azar del kit completo de Organic Pro entre los participantes cargados.</p>
             <button type="button" id="btn-sortear" class="btn btn--primary btn--full">Realizar sorteo</button>
 
             <div id="countdown" class="countdown" hidden>
@@ -87,6 +69,7 @@
     </section>
   </div>
 
+  <script src="participantes-data.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>
